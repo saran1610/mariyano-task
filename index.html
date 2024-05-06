@@ -1,0 +1,84 @@
+<html>
+  <head>
+    <script src="./lightweight-charts.standalone.production.js"></script>
+    <script>
+     function loadCharts() {
+        const upButton = document.getElementById("upButton");
+        const downButton = document.getElementById("downButton");
+
+        const chartOptions = {
+          layout: {
+            textColor: "black",
+            background: { type: "solid", color: "white" },
+          },
+        };
+        var chart = LightweightCharts.createChart(document.body, chartOptions);
+        var lineSeries = chart.addLineSeries({ color: "#2962FF" });
+
+        var data = [{ value: 48500, time: parseInt(Date.now() / 1000) }];
+
+        lineSeries.setData(data);
+
+        var preValue = 485499;
+        var _currentValue = 48500;
+
+        var currentColor = "#2962FF";
+
+        upButton.addEventListener("click", () => {
+          _currentValue = preValue + Math.floor(Math.random() * 3);
+          console.log(preValue);
+          console.log(_currentValue);
+
+          lineSeries.applyOptions({ color: "green" });
+          
+        });
+
+        downButton.addEventListener("click", () => {
+          _currentValue = preValue - Math.floor(Math.random() * 3);
+          console.log(preValue);
+          console.log(_currentValue);
+          lineSeries.applyOptions({ color: "red" });
+          
+        });
+
+        setInterval(function () {
+          // _rnd = Math.floor(Math.random() * 10);
+
+          // if (_rnd < 5) {
+          //   _currentValue = preValue - Math.floor(Math.random() * 3);
+          // } else {
+          //   _currentValue = preValue + Math.floor(Math.random() * 3);
+          // }
+
+          lineSeries.update({
+            value: _currentValue,
+            time: parseInt(Date.now() / 1000),
+          });
+          preValue = _currentValue;
+
+
+          if (preValue < _currentValue) {
+            currentColor = "red";
+            lineSeries.applyOptions({ color: currentColor });
+          } else {
+            currentColor = "green";
+            lineSeries.applyOptions({ color: currentColor });
+          }
+        }, 1000);
+
+        preValue = _currentValue;
+
+
+        if (preValue < _currentValue) {
+          lineSeries.applyOptions({ color: "red" });
+        } else {
+          lineSeries.applyOptions({ color: "green" });
+        }
+      }
+    </script>
+  </head>
+  <body onload="loadCharts()">
+    <button id="upButton">UP</button>
+    <button id="downButton">DOWN</button>
+  </body>
+</html>
